@@ -112,8 +112,8 @@ const TodoList: React.FC = () => {
         <div>
             <h2>Todo List</h2>
             <TodoForm addTodo={addTodo} inputValue={inputValue} setInputValue={setInputValue} />
-            <Todo todos={todos} setTodos={setTodos} onDelete={deleteTodo} onToggleComplete={toggleComplete} />
             <TaskCounter count={todos.length} />
+            <Todo todos={todos} setTodos={setTodos} onDelete={deleteTodo} onToggleComplete={toggleComplete} />
         </div>
     );
 };

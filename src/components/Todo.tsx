@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TodoProps } from '../utils/todoProps';
 import { ToDo } from '../utils/todo.model';
+import { Button, ButtonGroup, Input } from '@mui/material';
 
 const Todo: React.FC<TodoProps & { setTodos: React.Dispatch<React.SetStateAction<ToDo[]>> }> = ({
     todos,
@@ -48,33 +49,51 @@ const Todo: React.FC<TodoProps & { setTodos: React.Dispatch<React.SetStateAction
 
     return (
         <div>
-            <div>
-                <button
+            <ButtonGroup
+                variant='contained'
+                aria-label='Basic button group'
+                color='warning'
+                style={{ marginBottom: 25 }}
+            >
+                <Button
+                    size='small'
                     onClick={() => handleFilterChange('all')}
                     style={{ fontWeight: filter === 'all' ? 'bold' : 'normal' }}
                 >
                     Show All Tasks
-                </button>
-                <button
+                </Button>
+                <Button
+                    size='small'
                     onClick={() => handleFilterChange('active')}
                     style={{ fontWeight: filter === 'active' ? 'bold' : 'normal' }}
                 >
                     Show Active Tasks
-                </button>
-                <button
+                </Button>
+                <Button
+                    size='small'
                     onClick={() => handleFilterChange('completed')}
                     style={{ fontWeight: filter === 'completed' ? 'bold' : 'normal' }}
                 >
                     Show Completed Tasks
-                </button>
-            </div>
+                </Button>
+            </ButtonGroup>
             {filteredTodos.map((todo: ToDo) => (
-                <div key={todo.id}>
+                <div style={{ display: 'flex', justifyContent: 'center' }} key={todo.id}>
                     {editedTodo && editedTodo.id === todo.id ? (
                         <div>
-                            <input type='text' value={editedTodo.title} onChange={handleChange} />
-                            <button onClick={() => handleSave(todo.id, todo.title)}>Save</button>
-                            <button onClick={handleCancel}>Cancel</button>
+                            <Input type='text' value={editedTodo.title} onChange={handleChange} />
+                            <div>
+                                <Button
+                                    style={{ marginRight: 10 }}
+                                    color='info'
+                                    onClick={() => handleSave(todo.id, todo.title)}
+                                >
+                                    Save
+                                </Button>
+                                <Button color='error' onClick={handleCancel}>
+                                    Cancel
+                                </Button>
+                            </div>
                         </div>
                     ) : (
                         <div>
@@ -86,8 +105,19 @@ const Todo: React.FC<TodoProps & { setTodos: React.Dispatch<React.SetStateAction
                                 checked={todo.completed}
                                 onChange={() => onToggleComplete(todo.id)}
                             />
-                            <button onClick={() => handleEdit(todo.id, todo.title)}>Edit</button>
-                            <button onClick={() => onDelete(todo.id)}>Delete</button>
+                            <div style={{ margin: 10 }}>
+                                <Button
+                                    variant='contained'
+                                    color='info'
+                                    style={{ marginRight: 10 }}
+                                    onClick={() => handleEdit(todo.id, todo.title)}
+                                >
+                                    Edit
+                                </Button>
+                                <Button variant='contained' color='error' onClick={() => onDelete(todo.id)}>
+                                    Delete
+                                </Button>
+                            </div>
                         </div>
                     )}
                 </div>

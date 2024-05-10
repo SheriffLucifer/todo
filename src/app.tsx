@@ -1,7 +1,7 @@
-import TodoList from './components/TodoList';
+import MainContainer from './components/MainContainer';
 
 function App() {
-    return <TodoList />;
+    return <MainContainer />;
 }
 
 export default App;
