@@ -8,7 +8,7 @@ const MainContainer: React.FC = () => {
         <div>
             <SApp>
                 <Container maxWidth='xl'>
-                    <TodoList></TodoList>
+                    <TodoList />
                 </Container>
             </SApp>
         </div>
