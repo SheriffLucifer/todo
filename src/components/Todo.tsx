@@ -9,16 +9,28 @@ const Todo: React.FC<TodoProps & { setTodos: React.Dispatch<React.SetStateAction
     onDelete,
     onToggleComplete,
 }) => {
-    const [editedTodo, setEditedTodo] = useState<{ id: string; title: string } | null>(null);
+    const [editedTodo, setEditedTodo] = useState<{ id: string; title: string; originalCompleted: boolean } | null>(
+        null
+    );
     const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
-    const handleEdit = (id: string, title: string) => {
-        setEditedTodo({ id, title });
+    const handleEdit = (id: string, title: string, completed: boolean) => {
+        setEditedTodo({ id, title, originalCompleted: completed });
     };
 
-    const handleSave = (id: string, title: string) => {
+    const handleSave = (id: string, oldTitle: string, completed: boolean) => {
         if (editedTodo) {
-            const updatedTodos = todos.map(todo => (todo.id === id ? { ...todo, title: editedTodo.title } : todo));
+            const newTitle = editedTodo.title.trim();
+            const updatedTodos = todos.map(todo => {
+                if (todo.id === id) {
+                    return {
+                        ...todo,
+                        title: newTitle,
+                        completed: oldTitle === newTitle ? completed : false,
+                    };
+                }
+                return todo;
+            });
             setTodos(updatedTodos);
             setEditedTodo(null);
         }
@@ -86,7 +98,7 @@ const Todo: React.FC<TodoProps & { setTodos: React.Dispatch<React.SetStateAction
                                 <Button
                                     style={{ marginRight: 10 }}
                                     color='info'
-                                    onClick={() => handleSave(todo.id, todo.title)}
+                                    onClick={() => handleSave(todo.id, todo.title, todo.completed)}
                                 >
                                     Save
                                 </Button>
@@ -97,20 +109,21 @@ const Todo: React.FC<TodoProps & { setTodos: React.Dispatch<React.SetStateAction
                         </div>
                     ) : (
                         <div>
-                            <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                                {todo.title}
-                            </span>
                             <input
                                 type='checkbox'
                                 checked={todo.completed}
                                 onChange={() => onToggleComplete(todo.id)}
+                                style={{ marginRight: 10, verticalAlign: 'middle' }}
                             />
+                            <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                                {todo.title}
+                            </span>
                             <div style={{ margin: 10 }}>
                                 <Button
                                     variant='contained'
                                     color='info'
                                     style={{ marginRight: 10 }}
-                                    onClick={() => handleEdit(todo.id, todo.title)}
+                                    onClick={() => handleEdit(todo.id, todo.title, todo.completed)}
                                 >
                                     Edit
                                 </Button>
